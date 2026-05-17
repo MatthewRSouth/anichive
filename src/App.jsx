@@ -3,7 +3,7 @@ import Navigation from './components/Navigation';
 import Browse from './components/Browse';
 import Button from './components/Button';
 import './App.css';
-import { searchAnime } from './api/jikan';
+import AnimeList from './components/AnimeList';
 
 function App() {
     const [query, setQuery] = useState('');
@@ -11,8 +11,30 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    function handleQueryChange(query) {
-        setQuery(query);
+    useEffect(
+        function () {
+            async function fetchAnime() {
+                if (query.length < 3) {
+                    setResults([]);
+                    return;
+                }
+                const res = await fetch(
+                    `https://api.jikan.moe/v4/anime?q=${query}`,
+                );
+                const data = await res.json();
+                console.log(data.data);
+                setResults(data.data);
+            }
+            const timerID = setTimeout(fetchAnime, 500);
+            return function () {
+                clearTimeout(timerID);
+            };
+        },
+        [query],
+    );
+
+    function handleQueryChange(newQuery) {
+        setQuery(newQuery);
     }
     return (
         <div>
@@ -20,7 +42,7 @@ function App() {
                 handleQueryChange={handleQueryChange}
                 query={query}
             ></Navigation>
-            <p>{query}</p>
+            <AnimeList results={results}></AnimeList>
         </div>
     );
 }
