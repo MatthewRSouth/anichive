@@ -1,0 +1,15 @@
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo-main {
+    margin-right: 5px;
+    font-size: 20pt;
+}
+.logo-sub {
+    font-size: 7pt;
+    color: lightgray;
+    align-items: flex-end;
+    margin-top: 20px;
+}

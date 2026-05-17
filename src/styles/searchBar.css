@@ -1,0 +1,10 @@
+.search-bar-container {
+    display: flex;
+}
+.query {
+    width: 400px;
+    height: 65px;
+    text-align: center;
+    font-size: 12pt;
+    border-radius: 50px;
+}
