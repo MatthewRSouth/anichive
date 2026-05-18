@@ -37,13 +37,18 @@ function App() {
         setQuery(newQuery);
     }
     return (
-        <div>
-            <Navigation
-                handleQueryChange={handleQueryChange}
-                query={query}
-            ></Navigation>
-            <AnimeList results={results}></AnimeList>
-        </div>
+        <>
+            <header>
+                <Navigation
+                    handleQueryChange={handleQueryChange}
+                    query={query}
+                ></Navigation>
+            </header>
+            <main>
+                <AnimeList results={results}></AnimeList>
+            </main>
+            <footer></footer>
+        </>
     );
 }
 
