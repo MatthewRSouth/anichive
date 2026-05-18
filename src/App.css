@@ -1,0 +1,33 @@
+:root {
+    /* background and secondary */
+    --background-color: hsl(38, 44%, 96%);
+    --background-color-dark: hsl(41, 36%, 91%);
+    --line: hsl(42, 29%, 85%);
+    /* text */
+    --text: hsl(30, 16%, 7%);
+    --text-light: hsl(27, 15%, 14%);
+    --labels: hsl(37, 10%, 43%);
+}
+body {
+    color: var(--text);
+    background-color: var(--background-color);
+}
+
+.labels {
+    font-family: 'JetBrains Mono', monospace;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.headlines {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-variation-settings: 'wdth' 100;
+}
+
+.body {
+    font-family: 'DM Sans', sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
