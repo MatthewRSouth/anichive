@@ -1,21 +1,35 @@
 import '../styles/animeList.css';
-export default function AnimeList({ results }) {
+export default function AnimeList({
+    results,
+    onOpenModal,
+    onCloseModal,
+    openModal,
+}) {
     return (
         <ul className="anime-list-container">
             {results.map((anime) => (
-                <Anime anime={anime} key={anime.mal_id}></Anime>
+                <Anime
+                    anime={anime}
+                    key={anime.mal_id}
+                    onOpenModal={onOpenModal}
+                    onCloseModal={onCloseModal}
+                    openModal={openModal}
+                ></Anime>
             ))}
         </ul>
     );
 }
 
-function Anime({ anime }) {
+function Anime({ anime, openModal, onOpenModal, onCloseModal }) {
     const initRating = anime.score;
     const roundedRating = Math.ceil(initRating * 10) / 10;
     const rating = roundedRating.toFixed(1);
 
     return (
-        <li className="anime-item">
+        <li
+            className="anime-item"
+            onClick={!openModal ? onOpenModal : onCloseModal}
+        >
             <img
                 src={anime.images.jpg.image_url}
                 alt={`${anime.title}'s poster`}

@@ -3,6 +3,7 @@
 }
 .query {
     width: 400px;
+    margin: 10px;
     height: 65px;
     text-align: center;
     font-size: 12pt;

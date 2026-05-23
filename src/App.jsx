@@ -8,6 +8,7 @@ import ErrorMessage from './components/ErrorMessage';
 import Loading from './components/Loading';
 import Empty from './components/Empty';
 import Pagination from './components/Pagination';
+import AnimeModal from './components/AnimeModal';
 
 function App() {
     const [query, setQuery] = useState('');
@@ -17,7 +18,7 @@ function App() {
     const [hasSearched, setHasSearched] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-
+    const [openModal, setOpenModal] = useState(false);
     const PAGE_SIZE = 24;
 
     useEffect(
@@ -64,10 +65,18 @@ function App() {
     function handleQueryChange(newQuery) {
         setQuery(newQuery);
         setCurrentPage(1);
+        setOpenModal(false);
     }
 
     function handlePageChange(newPage) {
         setCurrentPage(newPage);
+    }
+
+    function handleOpenModal() {
+        setOpenModal(true);
+    }
+    function handleCloseModal() {
+        setOpenModal(false);
     }
     const content = loading ? (
         <Loading />
@@ -77,7 +86,13 @@ function App() {
         <Empty query={query}></Empty>
     ) : results.length > 0 ? (
         <>
-            <AnimeList results={results}></AnimeList>
+            <AnimeList
+                results={results}
+                onOpenModal={handleOpenModal}
+                onCloseModal={handleCloseModal}
+                openModal={openModal}
+            ></AnimeList>
+
             {totalPages > 1 && (
                 <Pagination
                     currentPage={currentPage}
@@ -89,14 +104,20 @@ function App() {
     ) : null;
     return (
         <>
-            <header>
-                <Navigation
-                    handleQueryChange={handleQueryChange}
-                    query={query}
-                ></Navigation>
-            </header>
-            <main>{content}</main>
-            <footer></footer>
+            {!openModal ? (
+                <>
+                    <header>
+                        <Navigation
+                            handleQueryChange={handleQueryChange}
+                            query={query}
+                        ></Navigation>
+                    </header>
+                    <main>{content}</main>
+                    <footer></footer>
+                </>
+            ) : (
+                <AnimeModal onCloseModal={handleCloseModal}></AnimeModal>
+            )}
         </>
     );
 }

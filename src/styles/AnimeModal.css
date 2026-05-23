@@ -1,0 +1,22 @@
+.modal-container {
+    background-color: rgba(34, 34, 34, 0.8);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.modal-window {
+    background-color: var(--background-color);
+    width: 50%;
+    height: 90%;
+    border-radius: 25px;
+}
+.modal-close-button {
+    display: flex;
+    color: white;
+    font-size: 10pt;
+    position: relative;
+    top: 15px;
+    left: 15px;
+}
