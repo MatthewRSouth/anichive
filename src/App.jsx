@@ -7,6 +7,7 @@ import AnimeList from './components/AnimeList';
 import ErrorMessage from './components/ErrorMessage';
 import Loading from './components/Loading';
 import Empty from './components/Empty';
+import Pagination from './components/Pagination';
 
 function App() {
     const [query, setQuery] = useState('');
@@ -14,29 +15,38 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const [hasSearched, setHasSearched] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
+
+    const PAGE_SIZE = 24;
 
     useEffect(
         function () {
+            const controller = new AbortController();
             async function fetchAnime() {
                 setError(null);
                 if (query.length < 3) {
                     setResults([]);
                     setHasSearched(false);
+                    setTotalPages(0);
                     return;
                 }
 
                 try {
                     setLoading(true);
                     const res = await fetch(
-                        `https://api.jikan.moe/v4/anime?q=${query}`,
+                        `https://api.jikan.moe/v4/anime?q=${query}&page=${currentPage}&limit=${PAGE_SIZE}`,
+                        { signal: controller.signal },
                     );
                     if (!res.ok)
                         throw new Error(`Jikan request failed: ${res.status}`);
                     const data = await res.json();
 
-                    setResults(data.data);
                     setHasSearched(true);
+                    setResults(data.data);
+                    setTotalPages(data.pagination.last_visible_page);
                 } catch (err) {
+                    if (err.name === 'AbortError') return;
                     setError(err);
                 } finally {
                     setLoading(false);
@@ -45,13 +55,19 @@ function App() {
             const timerID = setTimeout(fetchAnime, 500);
             return function () {
                 clearTimeout(timerID);
+                controller.abort();
             };
         },
-        [query],
+        [query, currentPage],
     );
 
     function handleQueryChange(newQuery) {
         setQuery(newQuery);
+        setCurrentPage(1);
+    }
+
+    function handlePageChange(newPage) {
+        setCurrentPage(newPage);
     }
     const content = loading ? (
         <Loading />
@@ -59,9 +75,18 @@ function App() {
         <ErrorMessage message={error.message} />
     ) : hasSearched && results.length === 0 && query.length >= 3 ? (
         <Empty query={query}></Empty>
-    ) : (
-        <AnimeList results={results}></AnimeList>
-    );
+    ) : results.length > 0 ? (
+        <>
+            <AnimeList results={results}></AnimeList>
+            {totalPages > 1 && (
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                ></Pagination>
+            )}
+        </>
+    ) : null;
     return (
         <>
             <header>
