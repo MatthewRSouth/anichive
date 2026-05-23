@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import Navigation from './components/Navigation';
-import Browse from './components/Browse';
-import Button from './components/Button';
+// import Browse from './components/Browse';
+// import Button from './components/Button';
 import './App.css';
 import AnimeList from './components/AnimeList';
 import ErrorMessage from './components/ErrorMessage';
@@ -19,6 +19,7 @@ function App() {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
     const [openModal, setOpenModal] = useState(false);
+    const [selectedAnimeId, setSelectedAnimeId] = useState(0);
     const PAGE_SIZE = 24;
 
     useEffect(
@@ -72,12 +73,16 @@ function App() {
         setCurrentPage(newPage);
     }
 
-    function handleOpenModal() {
+    function handleOpenModal(animeId) {
         setOpenModal(true);
+        setSelectedAnimeId(animeId);
+
+        console.log('Clicked anime ID:', animeId);
     }
     function handleCloseModal() {
         setOpenModal(false);
     }
+
     const content = loading ? (
         <Loading />
     ) : error ? (
@@ -116,7 +121,10 @@ function App() {
                     <footer></footer>
                 </>
             ) : (
-                <AnimeModal onCloseModal={handleCloseModal}></AnimeModal>
+                <AnimeModal
+                    onCloseModal={handleCloseModal}
+                    selectedAnimeId={selectedAnimeId}
+                ></AnimeModal>
             )}
         </>
     );

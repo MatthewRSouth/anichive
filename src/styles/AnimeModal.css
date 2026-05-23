@@ -20,3 +20,22 @@
     top: 15px;
     left: 15px;
 }
+.modal-info-box {
+    display: flex;
+    justify-content: space-evenly;
+}
+.modal-poster {
+}
+.modal-middle-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.modal-right-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.modal-synopsis {
+    font-size: 10pt;
+}

@@ -4,6 +4,7 @@ export default function AnimeList({
     onOpenModal,
     onCloseModal,
     openModal,
+    getAnimeId,
 }) {
     return (
         <ul className="anime-list-container">
@@ -11,25 +12,27 @@ export default function AnimeList({
                 <Anime
                     anime={anime}
                     key={anime.mal_id}
+                    animeId={anime.mal_id}
                     onOpenModal={onOpenModal}
                     onCloseModal={onCloseModal}
                     openModal={openModal}
+                    getAnimeId={getAnimeId}
                 ></Anime>
             ))}
         </ul>
     );
 }
 
-function Anime({ anime, openModal, onOpenModal, onCloseModal }) {
+function Anime({ anime, onOpenModal, animeId }) {
+    const handleClick = function () {
+        onOpenModal(animeId);
+    };
     const initRating = anime.score;
     const roundedRating = Math.ceil(initRating * 10) / 10;
     const rating = roundedRating.toFixed(1);
 
     return (
-        <li
-            className="anime-item"
-            onClick={!openModal ? onOpenModal : onCloseModal}
-        >
+        <li className="anime-item" onClick={handleClick}>
             <img
                 src={anime.images.jpg.image_url}
                 alt={`${anime.title}'s poster`}
