@@ -1,31 +1,21 @@
 import '../styles/animeList.css';
-export default function AnimeList({
-    results,
-    onOpenModal,
-    onCloseModal,
-    openModal,
-    getAnimeId,
-}) {
+export default function AnimeList({ results, onOpenModal }) {
     return (
         <ul className="anime-list-container">
             {results.map((anime) => (
                 <Anime
                     anime={anime}
                     key={anime.mal_id}
-                    animeId={anime.mal_id}
                     onOpenModal={onOpenModal}
-                    onCloseModal={onCloseModal}
-                    openModal={openModal}
-                    getAnimeId={getAnimeId}
-                ></Anime>
+                />
             ))}
         </ul>
     );
 }
 
-function Anime({ anime, onOpenModal, animeId }) {
+function Anime({ anime, onOpenModal }) {
     const handleClick = function () {
-        onOpenModal(animeId);
+        onOpenModal(anime.mal_id);
     };
     const initRating = anime.score;
     const roundedRating = Math.ceil(initRating * 10) / 10;

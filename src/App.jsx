@@ -66,7 +66,6 @@ function App() {
     function handleQueryChange(newQuery) {
         setQuery(newQuery);
         setCurrentPage(1);
-        setOpenModal(false);
     }
 
     function handlePageChange(newPage) {
@@ -74,12 +73,14 @@ function App() {
     }
 
     function handleOpenModal(animeId) {
+        console.log('handleOpenModal called', animeId);
         setOpenModal(true);
         setSelectedAnimeId(animeId);
 
         console.log('Clicked anime ID:', animeId);
     }
     function handleCloseModal() {
+        console.log('handleCloseModal called', new Error().stack);
         setOpenModal(false);
     }
 
@@ -94,8 +95,6 @@ function App() {
             <AnimeList
                 results={results}
                 onOpenModal={handleOpenModal}
-                onCloseModal={handleCloseModal}
-                openModal={openModal}
             ></AnimeList>
 
             {totalPages > 1 && (
@@ -109,18 +108,16 @@ function App() {
     ) : null;
     return (
         <>
-            {!openModal ? (
-                <>
-                    <header>
-                        <Navigation
-                            handleQueryChange={handleQueryChange}
-                            query={query}
-                        ></Navigation>
-                    </header>
-                    <main>{content}</main>
-                    <footer></footer>
-                </>
-            ) : (
+            <header>
+                <Navigation
+                    handleQueryChange={handleQueryChange}
+                    query={query}
+                ></Navigation>
+            </header>
+            <main>{content}</main>
+            <footer></footer>
+
+            {openModal && (
                 <AnimeModal
                     onCloseModal={handleCloseModal}
                     selectedAnimeId={selectedAnimeId}

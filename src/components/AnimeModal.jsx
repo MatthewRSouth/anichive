@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import '../styles/AnimeModal.css';
 export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
-    const [animeModalerror, setAnimeModalError] = useState(null);
+    const [animeModalError, setAnimeModalError] = useState(null);
     const [animeModalLoading, setAnimeModalLoading] = useState(false);
     const [animeModalResults, setAnimeModalResults] = useState(null);
     useEffect(
         function () {
-            const controller = new AbortController();
             if (!selectedAnimeId) return;
+            const controller = new AbortController();
+
             async function fetchAnimeById() {
                 setAnimeModalError(null);
 
@@ -54,7 +55,9 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
                 </button>
                 <div className="anime-info-container">
                     {animeModalLoading && <p>Loading...</p>}
-                    {animeModalerror && <p> Error: {animeModalerror}</p>}
+                    {animeModalError && (
+                        <p> Error: {animeModalError.message}</p>
+                    )}
                     {animeModalResults && (
                         <div className="modal-info-box">
                             <div className="modal-poster">
