@@ -12,34 +12,103 @@
 }
 .modal-window {
     background-color: var(--background-color);
-    width: 50%;
+    width: 80%;
     height: 90%;
     border-radius: 25px;
+    padding: 5px;
+    font-family: var(--body-font);
+}
+.modal-close-button-container {
+    display: flex;
+    justify-content: flex-end;
 }
 .modal-close-button {
-    display: flex;
     color: white;
-    font-size: 10pt;
-    position: relative;
-    top: 15px;
-    left: 15px;
+    font-size: 7pt;
+    border-radius: 25px;
+    padding: 10px;
+    margin: 10px;
+    letter-spacing: 2px;
+    background-color: transparent;
+    color: black;
+}
+.modal-anime-title-container {
+    padding: 10px;
+    font-family: var(--header-font);
+}
+.anime-rating-container {
+    justify-self: flex-end;
+    position: absolute;
+    top: 120px;
+}
+.anime-rating {
+    font-size: 48px;
+    font-weight: bold;
+}
+.anime-rating-small {
+    font-size: 12px;
+    font-weight: 400;
+}
+.modal-english-title {
+    font-size: clamp(20px, 4vw, 42px);
+}
+.modal-romaji-title {
+    font-size: 14px;
+    font-style: italic;
+}
+.modal-japanese-title {
+    font-size: 12px;
+}
+.dashed-line {
+    border: none;
+    border-top: 1px dashed #000;
+    width: 100%;
 }
 .modal-info-box {
     display: flex;
     justify-content: space-evenly;
+    margin-top: 15px;
 }
 .modal-poster {
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    filter: drop-shadow(4px 4px 0px var(--text-light));
+    height: 350px;
+    width: 250px;
 }
+
 .modal-middle-container {
     display: flex;
-    justify-content: center;
     flex-direction: column;
+    width: 300px;
+}
+.top-container {
+}
+.modal-rankings {
+    text-align: center;
+    width: 75%;
+    border-radius: 25px;
+    border: 1px solid black;
+    background-color: var(--background-color-dark);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.modal-rankings-top,
+.modal-rankings-bottom {
+    display: flex;
+    justify-content: space-between;
+}
+.bottom-container {
 }
 .modal-right-container {
     display: flex;
     justify-content: center;
     flex-direction: column;
+    width: 300px;
 }
 .modal-synopsis {
     font-size: 10pt;
+    font-family: var(--body-font);
 }
