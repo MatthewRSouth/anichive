@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import Rating from './Rating';
 import '../styles/AnimeModal.css';
 export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
     const [animeModalError, setAnimeModalError] = useState(null);
@@ -106,30 +107,38 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
                                     <div className="modal-rankings">
                                         <div className="modal-rankings-top">
                                             <div className="modal-rank">
-                                                <span className="rank">Rank</span>
-                                                <br />
-                                                #{animeModalResults.rank}
+                                                <span className="rank bold">
+                                                    Rank
+                                                </span>
+                                                <br />#{animeModalResults.rank}
                                             </div>
                                             <div className="modal-popularity">
-                                                <span className="popularity">Popularity</span>
-                                                <br />
-                                                #{animeModalResults.popularity}
+                                                <span className="popularity bold">
+                                                    Popularity
+                                                </span>
+                                                <br />#
+                                                {animeModalResults.popularity}
                                             </div>
                                         </div>
                                         <div className="modal-rankings-bottom">
                                             <div className="modal-members">
-                                                <span className="members">Members</span>
+                                                <span className="members bold">
+                                                    Members
+                                                </span>
                                                 <br />
                                                 {animeModalResults.members}
                                             </div>
                                             <div className="modal-episodes">
-                                                <span className="episodes">Episodes</span>
+                                                <span className="episodes bold">
+                                                    Episodes
+                                                </span>
                                                 <br />
                                                 {animeModalResults.episodes}
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="modal-personal-score"></div>
+                                    <Rating></Rating>
+
                                     <div className="modal-watch-status"></div>
                                     <div className="modal-misc-info"></div>
                                 </div>
