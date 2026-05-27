@@ -11,16 +11,25 @@
     left: 0;
 }
 .modal-window {
-    background-color: var(--background-color);
-    width: 80%;
-    height: 90%;
+    background-color: var(--background-color-dark);
+    width: 100%;
     border-radius: 25px;
-    padding: 5px;
     font-family: var(--body-font);
+    max-width: 1100px;
+    padding: 24px;
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas:
+        'title   title   close'
+        'divider divider divider'
+        'poster  middle  synopsis';
+    gap: 0 16px;
 }
 .modal-close-button-container {
-    display: flex;
-    justify-content: flex-end;
+    grid-area: close;
+    justify-self: end;
+    align-self: start;
 }
 .modal-close-button:focus {
     background-color: var(--text);
@@ -44,13 +53,12 @@
     border: 1px solid black;
 }
 .modal-anime-title-container {
+    grid-area: title;
     padding: 10px;
     font-family: var(--header-font);
 }
 .anime-rating-container {
-    justify-self: flex-end;
-    position: absolute;
-    top: 120px;
+    margin-top: 8px;
 }
 .anime-rating {
     font-size: 48px;
@@ -59,9 +67,10 @@
 .anime-rating-small {
     font-size: 12px;
     font-weight: 400;
+    margin-left: 5px;
 }
 .modal-english-title {
-    font-size: clamp(20px, 4vw, 42px);
+    font-size: clamp(24px, 4vw, 42px);
     margin-bottom: 10px;
 }
 .modal-romaji-title {
@@ -74,16 +83,19 @@
     margin-bottom: 10px;
 }
 .dashed-line {
+    grid-area: divider;
     border: none;
     border-top: 1px dashed #000;
     width: 100%;
+    align-self: center;
+    margin: 8px 0;
 }
-.modal-info-box {
-    display: flex;
-    justify-content: space-evenly;
-    margin-top: 15px;
+.modal-status {
+    grid-column: 1 / -1;
 }
 .modal-poster {
+    grid-area: poster;
+    align-self: start;
     border-radius: 10px;
     border: 1px solid var(--line);
     filter: drop-shadow(4px 4px 0px var(--text-light));
@@ -92,70 +104,130 @@
 }
 
 .modal-middle-container {
+    grid-area: middle;
     display: flex;
     flex-direction: column;
-    width: 300px;
 }
 .top-container {
 }
 .modal-rankings {
-    text-align: center;
-    border-radius: 25px;
+    border-radius: 15px;
     border: 1px solid black;
     background-color: var(--background-color-dark);
     padding: 15px;
     display: flex;
     flex-direction: column;
+    font-family: var(--label-font);
 }
 .modal-rankings-top,
 .modal-rankings-bottom {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+}
+.rank-title,
+.popularity-title,
+.members-title,
+.episodes-title {
+    font-size: 11px;
+}
+.rank,
+.popularity,
+.members,
+.episodes {
+    font-family: var(--body-font);
+    font-size: 22px;
+    font-weight: 800;
 }
 .bottom-container {
 }
 .modal-personal-score-container {
     display: flex;
     justify-content: center;
+    font-family: var(--label-font);
 }
 .modal-personal-score-content {
     border: 1px solid black;
     width: 100%;
-    border-radius: 25px;
+    border-radius: 15px;
     padding: 15px;
+    margin-top: 15px;
 }
 .score {
     display: flex;
     justify-content: space-between;
+    font-size: 11px;
+    font-family: var(--label-font);
 }
 .score span {
     color: red;
+    font-size: 22px;
 }
 .numbers {
     display: flex;
     justify-content: space-between;
+    font-size: 11px;
+    font-family: var(--label-font∂);
 }
 .score-buttons {
     background-color: transparent;
     border-radius: 5px;
-    padding: 5px;
+    padding: 6px;
     margin: 2px;
     width: 60px;
+    border: 1px solid black;
+    transition: background-color 0.2s ease color 0.2s ease;
+    backface-visibility: hidden;
 }
-.score-buttons:hover {
+.score-buttons:not(.score-buttons-full):hover {
     background-color: red;
     color: white;
+
+    cursor: pointer;
+}
+.score-buttons:hover {
     transform: translateY(-2px);
 }
 .score-buttons-full {
     background-color: red;
     color: white;
 }
-.modal-right-container {
+.rating-explanation-container {
     display: flex;
-    justify-content: center;
+    font-size: 11px;
+    justify-content: space-between;
+    font-family: var(--label-font);
+    margin-top: 5px;
+}
+.modal-watch-status {
+    display: flex;
+    justify-content: space-between;
+    gap: 6px;
+    margin-top: 15px;
+}
+/* .watch-status-button {
+    border-radius: 10px;
+    border: 1px solid black;
+} */
+.watch-status-button {
+    background-color: transparent;
+    padding: 9px 10px;
+    border-radius: 10px;
+    flex: 1;
+    font-size: 13px;
+    border: 1px solid black;
+}
+.selected-watch-status {
+    background-color: var(--text);
+    color: white;
+}
+.watch-status-button:not(.selected-watch-status):hover {
+    background-color: var(--hover);
+    cursor: pointer; /* Added for better UX */
+}
+.modal-right-container {
+    grid-area: synopsis;
+    display: flex;
     flex-direction: column;
-    width: 300px;
 }
 .modal-synopsis {
     font-size: 10pt;

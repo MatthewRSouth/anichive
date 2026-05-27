@@ -15,6 +15,7 @@
     --text: hsl(30, 16%, 7%);
     --text-light: hsl(27, 15%, 14%);
     --labels: hsl(37, 10%, 43%);
+    --hover: hsl(42, 29%, 82%);
     /* borders */
     --round-corners: 25px;
     --header-font: 'Bricolage Grotesque', sans-serif;

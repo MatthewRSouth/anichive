@@ -1,10 +1,15 @@
 import { useEffect, useState } from 'react';
+
 import Rating from './Rating';
+import Rank from './Rank';
+
 import '../styles/AnimeModal.css';
+
 export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
     const [animeModalError, setAnimeModalError] = useState(null);
     const [animeModalLoading, setAnimeModalLoading] = useState(false);
     const [animeModalResults, setAnimeModalResults] = useState(null);
+
     useEffect(
         function () {
             if (!selectedAnimeId) return;
@@ -55,34 +60,26 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
     return (
         <div className="modal-container">
             <div className="modal-window">
-                <div className="modal-close-button-container">
-                    <button
-                        onClick={onCloseModal}
-                        className="modal-close-button"
-                    >
-                        CLOSE x
-                    </button>
-                </div>
-
-                <div className="anime-info-container">
-                    {animeModalLoading && <p>Loading...</p>}
-                    {animeModalError && (
-                        <p> Error: {animeModalError.message}</p>
-                    )}
-                    {animeModalResults && (
-                        <>
-                            {' '}
-                            <div className="modal-anime-title-container">
-                                <h1 className="modal-english-title">
-                                    {animeModalResults.title_english}
-                                </h1>
-                                <p className="modal-romaji-title">
-                                    {animeModalResults.title}
-                                </p>
-                                <p className="modal-japanese-title">
-                                    {animeModalResults.title_japanese}
-                                </p>
-                            </div>
+                {animeModalLoading && (
+                    <p className="modal-status">Loading...</p>
+                )}
+                {animeModalError && (
+                    <p className="modal-status">
+                        Error: {animeModalError.message}
+                    </p>
+                )}
+                {animeModalResults && (
+                    <>
+                        <div className="modal-anime-title-container">
+                            <h1 className="modal-english-title">
+                                {animeModalResults.title_english}
+                            </h1>
+                            <p className="modal-romaji-title">
+                                {animeModalResults.title}
+                            </p>
+                            <p className="modal-japanese-title">
+                                {animeModalResults.title_japanese}
+                            </p>
                             <div className="anime-rating-container">
                                 <span className="anime-rating">
                                     {convertRating(animeModalResults.score)}
@@ -91,87 +88,91 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
                                     </span>
                                 </span>
                             </div>
-                            <hr className="dashed-line"></hr>
-                            <div className="modal-info-box">
-                                <div>
-                                    <img
-                                        className="modal-poster"
-                                        src={
-                                            animeModalResults.images?.jpg
-                                                ?.image_url
-                                        }
-                                        alt={`${animeModalResults.title}'s poster`}
-                                    />
-                                </div>
-                                <div className="modal-middle-container">
-                                    <div className="modal-rankings">
-                                        <div className="modal-rankings-top">
-                                            <div className="modal-rank">
-                                                <span className="rank bold">
-                                                    Rank
-                                                </span>
-                                                <br />#{animeModalResults.rank}
-                                            </div>
-                                            <div className="modal-popularity">
-                                                <span className="popularity bold">
-                                                    Popularity
-                                                </span>
-                                                <br />#
-                                                {animeModalResults.popularity}
-                                            </div>
-                                        </div>
-                                        <div className="modal-rankings-bottom">
-                                            <div className="modal-members">
-                                                <span className="members bold">
-                                                    Members
-                                                </span>
-                                                <br />
-                                                {animeModalResults.members}
-                                            </div>
-                                            <div className="modal-episodes">
-                                                <span className="episodes bold">
-                                                    Episodes
-                                                </span>
-                                                <br />
-                                                {animeModalResults.episodes}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <Rating></Rating>
+                        </div>
 
-                                    <div className="modal-watch-status"></div>
-                                    <div className="modal-misc-info"></div>
-                                </div>
-                                <div className="modal-right-container">
-                                    <span>SYNOPSIS</span>
-                                    <p className="modal-synopsis">
-                                        {animeModalResults.synopsis}
-                                    </p>
-                                    <div className="modal-anime-genres">
-                                        <span> GENRES/THEMES</span>
-                                        <ul>
-                                            {animeModalResults.genres.map(
-                                                (genre) => (
-                                                    <li key={genre.mal_id}>
-                                                        {genre.name}
-                                                    </li>
-                                                ),
-                                            )}
-                                            {animeModalResults.themes.map(
-                                                (theme) => (
-                                                    <li key={theme.mal_id}>
-                                                        {theme.name}
-                                                    </li>
-                                                ),
-                                            )}
-                                        </ul>
-                                    </div>
-                                </div>
+                        <div className="modal-close-button-container">
+                            <button
+                                onClick={onCloseModal}
+                                className="modal-close-button"
+                            >
+                                CLOSE x
+                            </button>
+                        </div>
+
+                        <hr className="dashed-line" />
+
+                        <img
+                            className="modal-poster"
+                            src={animeModalResults.images?.jpg?.image_url}
+                            alt={`${animeModalResults.title}'s poster`}
+                        />
+
+                        <div className="modal-middle-container">
+                            <Rank animeModalResults={animeModalResults} />
+                            <Rating />
+                            <WatchStatus />
+
+                            <div className="modal-misc-info"></div>
+                        </div>
+
+                        <div className="modal-right-container">
+                            <span>SYNOPSIS</span>
+                            <p className="modal-synopsis">
+                                {animeModalResults.synopsis}
+                            </p>
+                            <div className="modal-anime-genres">
+                                <span>GENRES/THEMES</span>
+                                <ul>
+                                    {animeModalResults.genres.map((genre) => (
+                                        <li key={genre.mal_id}>{genre.name}</li>
+                                    ))}
+                                    {animeModalResults.themes.map((theme) => (
+                                        <li key={theme.mal_id}>{theme.name}</li>
+                                    ))}
+                                </ul>
                             </div>
-                        </>
-                    )}
-                </div>
+                        </div>
+                    </>
+                )}
             </div>
+        </div>
+    );
+}
+
+function WatchStatus() {
+    const [watchStatus, setWatchStatus] = useState('');
+    return (
+        <div className="modal-watch-status">
+            <button
+                onClick={() => setWatchStatus('Watching')}
+                className={
+                    watchStatus === 'Watching'
+                        ? 'watch-status-button selected-watch-status'
+                        : 'watch-status-button'
+                }
+            >
+                Watching
+            </button>
+            <button
+                onClick={() => setWatchStatus('Completed')}
+                className={
+                    watchStatus === 'Completed'
+                        ? 'watch-status-button selected-watch-status'
+                        : 'watch-status-button'
+                }
+            >
+                Completed
+            </button>
+            <button
+                onClick={() => setWatchStatus('Plan to Watch')}
+                className={
+                    watchStatus === 'Plan to Watch'
+                        ? 'watch-status-button selected-watch-status'
+                        : 'watch-status-button'
+                }
+            >
+                Plan to Watch
+            </button>
         </div>
     );
 }

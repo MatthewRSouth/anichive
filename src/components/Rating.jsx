@@ -2,7 +2,7 @@ import '../styles/AnimeModal.css';
 import { useState } from 'react';
 export default function Rating() {
     const [rating, setRating] = useState(1);
-    const [tempRating, setTempRating] = useState(1);
+    const [tempRating, setTempRating] = useState(0);
 
     function handleRating(rating) {
         setRating(rating);
@@ -27,7 +27,7 @@ export default function Rating() {
                                     : rating >= index + 1
                             }
                             onHoverIn={() => setTempRating(index + 1)}
-                            onHoverOut={() => setTempRating(rating)}
+                            onHoverOut={() => setTempRating(0)}
                         >
                             {index + 1}
                         </Number>
@@ -35,10 +35,10 @@ export default function Rating() {
                 </ul>
 
                 <div className="rating-explanation-container">
-                    <p>TRASH</p>
-                    <p>OK</p>
-                    <p>GOOD</p>
-                    <p>PEAK</p>
+                    <p className="rating-explanation">TRASH</p>
+                    <p className="rating-explanation">OK</p>
+                    <p className="rating-explanation">GOOD</p>
+                    <p className="rating-explanation">PEAK</p>
                 </div>
             </div>
         </div>
