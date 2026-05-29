@@ -210,11 +210,12 @@
 } */
 .watch-status-button {
     background-color: transparent;
-    padding: 9px 10px;
+    padding: 20px 15px;
     border-radius: 10px;
     flex: 1;
     font-size: 13px;
     border: 1px solid black;
+    font-size: 11px;
 }
 .selected-watch-status {
     background-color: var(--text);
@@ -224,6 +225,22 @@
     background-color: var(--hover);
     cursor: pointer; /* Added for better UX */
 }
+.details-container dl {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 6px 14px;
+    margin-top: 25px;
+    padding: 14px;
+    border: 1px solid var(--text-light);
+    border-radius: 15px;
+    background-color: var(--background-color-dark);
+    font-size: 13px;
+}
+.detail dt {
+    font-family: var(--label-font);
+    font-size: 10px;
+    color: var(--labels);
+}
 .modal-right-container {
     grid-area: synopsis;
     display: flex;
@@ -232,6 +249,30 @@
 .modal-synopsis {
     font-size: 10pt;
     font-family: var(--body-font);
+}
+.genre-container {
+    display: flex;
+    gap: 7px;
+    margin-top: 15px;
+}
+.genre,
+.theme {
+    border: 1px solid black;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 9px;
+    font-size: 11px;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--labels);
+    font-family: var(--body-font);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.modal-anime-genres {
+    margin-top: 15px;
+    font-family: var(--label-font);
 }
 .bold {
     font-weight: 700;

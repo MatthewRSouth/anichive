@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import Rating from './Rating';
 import Rank from './Rank';
@@ -9,6 +9,21 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
     const [animeModalError, setAnimeModalError] = useState(null);
     const [animeModalLoading, setAnimeModalLoading] = useState(false);
     const [animeModalResults, setAnimeModalResults] = useState(null);
+
+    const modalRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                onCloseModal();
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [onCloseModal]);
 
     useEffect(
         function () {
@@ -59,7 +74,7 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
     }
     return (
         <div className="modal-container">
-            <div className="modal-window">
+            <div className="modal-window" ref={modalRef}>
                 {animeModalLoading && (
                     <p className="modal-status">Loading...</p>
                 )}
@@ -111,7 +126,9 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
                             <Rank animeModalResults={animeModalResults} />
                             <Rating />
                             <WatchStatus />
-
+                            <Details
+                                animeModalResults={animeModalResults}
+                            ></Details>
                             <div className="modal-misc-info"></div>
                         </div>
 
@@ -122,16 +139,33 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
                             </p>
                             <div className="modal-anime-genres">
                                 <span>GENRES/THEMES</span>
-                                <ul>
+                                <dl className="genre-container">
                                     {animeModalResults.genres.map((genre) => (
-                                        <li key={genre.mal_id}>{genre.name}</li>
+                                        <dt
+                                            className="genre"
+                                            key={genre.mal_id}
+                                            tone="outline"
+                                        >
+                                            {genre.name}
+                                        </dt>
                                     ))}
                                     {animeModalResults.themes.map((theme) => (
-                                        <li key={theme.mal_id}>{theme.name}</li>
+                                        <dt
+                                            className="theme"
+                                            key={theme.mal_id}
+                                        >
+                                            {theme.name}
+                                        </dt>
                                     ))}
-                                </ul>
+                                </dl>
                             </div>
                         </div>
+
+                        <section className="modal-recommended-container">
+                            <hr className="dashed-line" />
+                            <h2>If you liked this...</h2>
+                            <Recommendations></Recommendations>
+                        </section>
                     </>
                 )}
             </div>
@@ -175,4 +209,61 @@ function WatchStatus() {
             </button>
         </div>
     );
+}
+function Details({ animeModalResults }) {
+    return (
+        <div className="details-container">
+            <dl>
+                <Detail
+                    title="TYPE"
+                    description={animeModalResults.type || '-'}
+                />
+                <Detail
+                    title="YEAR"
+                    description={animeModalResults.year || '-'}
+                />
+                <Detail
+                    title="SEASON"
+                    description={
+                        animeModalResults?.season && animeModalResults?.year
+                            ? `${animeModalResults.season} ${animeModalResults.year}`
+                            : '-'
+                    }
+                />
+                <Detail
+                    title="DURATION"
+                    description={animeModalResults.duration || '-'}
+                />
+                <Detail
+                    title="SOURCE"
+                    description={animeModalResults.source || '-'}
+                />
+                <Detail
+                    title="RATING"
+                    description={animeModalResults.rating || '-'}
+                />
+                <Detail
+                    title="STUDIO"
+                    description={
+                        animeModalResults.studios
+                            .map((s) => s.name)
+                            .join(', ') || '—'
+                    }
+                />
+            </dl>
+        </div>
+    );
+}
+
+function Detail({ title, description }) {
+    return (
+        <>
+            <dt>{title}</dt>
+            <dd>{description}</dd>
+        </>
+    );
+}
+
+function Recommendations() {
+    return <div className="modal-recommendations">recommended</div>;
 }
