@@ -84,3 +84,12 @@ body {
 .active {
     background-color: orange;
 }
+
+@media (max-width: 767px) {
+    .loading,
+    .empty,
+    .error {
+        padding-top: 150px;
+        font-size: 14pt;
+    }
+}
