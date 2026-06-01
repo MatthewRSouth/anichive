@@ -2,10 +2,15 @@ import { useEffect, useState, useRef } from 'react';
 
 import Rating from './Rating';
 import Rank from './Rank';
+import '../styles/animeList.css';
 
 import '../styles/AnimeModal.css';
 
-export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
+export default function AnimeModal({
+    onCloseModal,
+    selectedAnimeId,
+    onOpenModal,
+}) {
     const [animeModalError, setAnimeModalError] = useState(null);
     const [animeModalLoading, setAnimeModalLoading] = useState(false);
     const [animeModalResults, setAnimeModalResults] = useState(null);
@@ -164,7 +169,10 @@ export default function AnimeModal({ onCloseModal, selectedAnimeId }) {
                         <section className="modal-recommended-container">
                             <hr className="dashed-line" />
                             <h2>If you liked this...</h2>
-                            <Recommendations></Recommendations>
+                            <Recommendations
+                                selectedAnimeId={selectedAnimeId}
+                                onOpenModal={onOpenModal}
+                            ></Recommendations>
                         </section>
                     </>
                 )}
@@ -264,6 +272,77 @@ function Detail({ title, description }) {
     );
 }
 
-function Recommendations() {
-    return <div className="modal-recommendations">recommended</div>;
+function Recommendations({ selectedAnimeId, onOpenModal }) {
+    const [recResults, setRecResults] = useState([]);
+    const [modalError, setModalError] = useState(false);
+    useEffect(
+        function () {
+            const controller = new AbortController();
+            async function fetchAnime() {
+                setModalError(null);
+
+                try {
+                    const res = await fetch(
+                        `https://api.jikan.moe/v4/anime/${selectedAnimeId}/recommendations`,
+                        { signal: controller.signal },
+                    );
+                    if (!res.ok)
+                        throw new Error(`Jikan request failed: ${res.status}`);
+                    const data = await res.json();
+
+                    setRecResults(
+                        data.data.slice(0, 6).map((item) => item.entry),
+                    );
+                } catch (err) {
+                    if (err.name === 'AbortError') return;
+                    setModalError(err);
+                }
+            }
+            const timerID = setTimeout(fetchAnime, 500);
+            return function () {
+                clearTimeout(timerID);
+                controller.abort();
+            };
+        },
+        [selectedAnimeId],
+    );
+
+    return (
+        <ul className="anime-list-container">
+            {recResults.map((anime) => (
+                <AnimeRec
+                    anime={anime}
+                    key={anime.mal_id}
+                    onOpenModal={onOpenModal}
+                />
+            ))}
+        </ul>
+    );
+}
+
+function AnimeRec({ anime, onOpenModal }) {
+    const handleClick = function () {
+        onOpenModal(anime.mal_id);
+    };
+    const initRating = anime.score || 0;
+    const roundedRating = Math.ceil(initRating * 10) / 10;
+    const rating = initRating ? roundedRating.toFixed(1) : '-';
+
+    return (
+        <li className="anime-item" onClick={handleClick}>
+            <img
+                src={anime.images.jpg.image_url}
+                alt={`${anime.title}'s poster`}
+                className="anime-item-poster"
+            />
+            <br></br>
+            {/* // TODO: anime.title is deprecated in Jikan v4. Migrate to
+            anime.titles array if/when multi-language support is added. */}
+            <div className="anime-title-container">
+                <span className="anime-item-title headlines">
+                    <strong> {anime.title}</strong>
+                </span>
+            </div>
+        </li>
+    );
 }

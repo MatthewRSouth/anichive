@@ -73,11 +73,8 @@ function App() {
     }
 
     function handleOpenModal(animeId) {
-        console.log('handleOpenModal called', animeId);
         setOpenModal(true);
         setSelectedAnimeId(animeId);
-
-        console.log('Clicked anime ID:', animeId);
     }
     function handleCloseModal() {
         console.log('handleCloseModal called', new Error().stack);
@@ -121,6 +118,7 @@ function App() {
                 <AnimeModal
                     onCloseModal={handleCloseModal}
                     selectedAnimeId={selectedAnimeId}
+                    onOpenModal={handleOpenModal}
                 ></AnimeModal>
             )}
         </>

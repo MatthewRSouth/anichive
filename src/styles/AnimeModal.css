@@ -25,6 +25,8 @@
         'divider divider divider'
         'poster  middle  synopsis';
     gap: 0 16px;
+    overflow-y: auto;
+    max-height: 90vh;
 }
 .modal-close-button-container {
     grid-area: close;
@@ -278,8 +280,27 @@
     font-weight: 700;
 }
 
+.modal-recommended-container {
+    grid-column: 1 / -1;
+    margin-top: 16px;
+}
+
+.modal-recommended-container .anime-list-container {
+    margin-top: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
 /* ── iPad Mini (768px – 1024px) ─────────────────────────────── */
 @media (min-width: 768px) and (max-width: 1024px) {
+    .modal-recommended-container .anime-item-poster {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 2 / 3;
+    }
+    .modal-recommended-container .anime-item-title {
+        width: 100%;
+    }
     .modal-window {
         grid-template-columns: 220px 1fr;
         grid-template-areas:
@@ -374,5 +395,17 @@
         padding: 5px 2px;
         margin: 0;
         font-size: 10px;
+    }
+    .modal-recommended-container .anime-list-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    .modal-recommended-container .anime-item-poster {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 2 / 3;
+    }
+    .modal-recommended-container .anime-item-title {
+        width: 100%;
     }
 }
