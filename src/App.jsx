@@ -20,6 +20,7 @@ function App() {
     const [totalPages, setTotalPages] = useState(0);
     const [openModal, setOpenModal] = useState(false);
     const [selectedAnimeId, setSelectedAnimeId] = useState(0);
+    const [discover, setDiscover] = useState('discover');
     const PAGE_SIZE = 24;
 
     useEffect(
@@ -62,6 +63,11 @@ function App() {
         },
         [query, currentPage],
     );
+
+    function handleDiscoverChange() {
+        setDiscover('browse');
+        console.log(discover);
+    }
 
     function handleQueryChange(newQuery) {
         setQuery(newQuery);
@@ -109,6 +115,8 @@ function App() {
                 <Navigation
                     handleQueryChange={handleQueryChange}
                     query={query}
+                    discover={discover}
+                    onDiscoverChange={handleDiscoverChange}
                 ></Navigation>
             </header>
             <main>{content}</main>
