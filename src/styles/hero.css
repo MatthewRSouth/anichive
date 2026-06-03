@@ -1,2 +1,54 @@
 .hero-container {
+    padding: 15px;
+    border: 1px solid black;
+    border-radius: 25px;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 32px;
+    margin: 150px 20px 20px 20px;
+}
+.hero-poster {
+    position: relative;
+    aspect-ratio: 2/3;
+    border: 1.5px solid black;
+    border-radius: 14px;
+    overflow: hidden;
+}
+.hero-poster-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.hero-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.anime-info {
+    margin-bottom: 20px;
+}
+.anime-title {
+    font-size: 60px;
+    font-family: var(--header-font);
+}
+.anime-jpn-title {
+    font-style: italic;
+    font-size: 15px;
+    font-family: var(--body-font);
+    margin-bottom: 20px;
+}
+.anime-ratings {
+    padding: 15px;
+    display: flex;
+    font-family: var(--label-font);
+    gap: 20px;
+}
+.label {
+}
+
+.pills-container {
+}
+.hero-pill {
+}
+.hero-buttons-container {
 }

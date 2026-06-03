@@ -9,6 +9,7 @@ import Loading from './components/Loading';
 import Empty from './components/Empty';
 import Pagination from './components/Pagination';
 import AnimeModal from './components/AnimeModal';
+import Hero from './components/Hero';
 
 function App() {
     const [query, setQuery] = useState('');
@@ -21,6 +22,7 @@ function App() {
     const [openModal, setOpenModal] = useState(false);
     const [selectedAnimeId, setSelectedAnimeId] = useState(0);
     const [discover, setDiscover] = useState('discover');
+
     const PAGE_SIZE = 24;
 
     useEffect(
@@ -64,9 +66,8 @@ function App() {
         [query, currentPage],
     );
 
-    function handleDiscoverChange() {
-        setDiscover('browse');
-        console.log(discover);
+    function handleDiscoverChange(view) {
+        setDiscover(view);
     }
 
     function handleQueryChange(newQuery) {
@@ -87,6 +88,66 @@ function App() {
         setOpenModal(false);
     }
 
+    return (
+        <>
+            <header>
+                <Navigation
+                    handleQueryChange={handleQueryChange}
+                    query={query}
+                    discover={discover}
+                    onDiscoverChange={handleDiscoverChange}
+                ></Navigation>
+            </header>
+            <main>
+                {discover === 'discover' ? (
+                    <DiscoverView></DiscoverView>
+                ) : (
+                    <BrowseView
+                        loading={loading}
+                        error={error}
+                        hasSearched={hasSearched}
+                        results={results}
+                        query={query}
+                        handleOpenModal={handleOpenModal}
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        handlePageChange={handlePageChange}
+                    ></BrowseView>
+                )}
+            </main>
+            <footer></footer>
+
+            {openModal && (
+                <AnimeModal
+                    onCloseModal={handleCloseModal}
+                    selectedAnimeId={selectedAnimeId}
+                    onOpenModal={handleOpenModal}
+                ></AnimeModal>
+            )}
+        </>
+    );
+}
+
+export default App;
+
+function DiscoverView() {
+    return (
+        <div>
+            <Hero></Hero>
+        </div>
+    );
+}
+function BrowseView({
+    loading,
+    error,
+    hasSearched,
+    results,
+    query,
+    handleOpenModal,
+    totalPages,
+    currentPage,
+    handlePageChange,
+}) {
     const content = loading ? (
         <Loading />
     ) : error ? (
@@ -109,28 +170,6 @@ function App() {
             )}
         </>
     ) : null;
-    return (
-        <>
-            <header>
-                <Navigation
-                    handleQueryChange={handleQueryChange}
-                    query={query}
-                    discover={discover}
-                    onDiscoverChange={handleDiscoverChange}
-                ></Navigation>
-            </header>
-            <main>{content}</main>
-            <footer></footer>
 
-            {openModal && (
-                <AnimeModal
-                    onCloseModal={handleCloseModal}
-                    selectedAnimeId={selectedAnimeId}
-                    onOpenModal={handleOpenModal}
-                ></AnimeModal>
-            )}
-        </>
-    );
+    return <div>{content}</div>;
 }
-
-export default App;

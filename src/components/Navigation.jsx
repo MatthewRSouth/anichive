@@ -1,6 +1,5 @@
 import Logo from './Logo';
 import SearchBar from './SearchBar';
-import Button from './Button';
 import '../styles/navbar.css';
 export default function Navigation({
     handleQueryChange,
@@ -17,28 +16,18 @@ export default function Navigation({
             ></SearchBar>
             <div className="button-container">
                 {' '}
-                <Button
-                    height="240px"
-                    width="480px"
-                    padding="large"
-                    color="black"
-                    borderRadius
-                    onDiscoverChange={onDiscoverChange}
-                    discover={discover}
+                <button
+                    className={`discover-button ${discover === 'discover' ? 'active' : ''}`}
+                    onClick={() => onDiscoverChange('discover')}
                 >
                     Discover
-                </Button>
-                <Button
-                    height="24px"
-                    width="48px"
-                    padding="large"
-                    color="black"
-                    borderRadius
-                    onDiscoverChange={onDiscoverChange}
-                    discover={discover}
+                </button>
+                <button
+                    className={`discover-button ${discover === 'browse' ? 'active' : ''}`}
+                    onClick={() => onDiscoverChange('browse')}
                 >
                     Browse
-                </Button>
+                </button>
             </div>
         </nav>
     );
