@@ -68,11 +68,13 @@ function App() {
 
     function handleDiscoverChange(view) {
         setDiscover(view);
+        setQuery('');
     }
 
     function handleQueryChange(newQuery) {
         setQuery(newQuery);
         setCurrentPage(1);
+        setDiscover('browse');
     }
 
     function handlePageChange(newPage) {

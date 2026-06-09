@@ -1,45 +1,85 @@
+import { useEffect, useState } from 'react';
 import '../styles/hero.css';
 export default function Hero() {
+    const [bestAnimeResults, setBestAnimeResults] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    useEffect(function () {
+        const controller = new AbortController();
+        async function fetchBestAnime() {
+            setError(null);
+            try {
+                setLoading(true);
+                const res = await fetch(
+                    `https://api.jikan.moe/v4/top/anime?limit=1`,
+                    { signal: controller.signal },
+                );
+                if (!res.ok) {
+                    throw new Error(`Jikan request failed: ${res.status}`);
+                }
+                const data = await res.json();
+                setBestAnimeResults(data.data);
+            } catch (err) {
+                setError(err);
+            } finally {
+                if (!controller.signal.aborted) setLoading(false);
+            }
+        }
+        fetchBestAnime();
+        return function () {
+            controller.abort();
+        };
+    }, []);
+
+    function convertRating(rating) {
+        const roundedRating = Math.ceil(rating * 10) / 10;
+        return roundedRating.toFixed(1);
+    }
     return (
         <div className="hero-container">
             <div className="hero-poster">
                 <img
-                    src="src/assets/poster-placeholder 1.svg"
-                    alt="X's poster"
+                    src={bestAnimeResults[0]?.images?.jpg?.image_url}
+                    alt={`${bestAnimeResults[0]?.title}'s poster`}
                     className="hero-poster-img"
                 />
             </div>
             <div className="hero-info-container">
                 <div className="anime-info">
-                    <h1 className="anime-title">Anime Title</h1>
-                    <p className="anime-jpn-title">Japanese Title</p>
+                    <h1 className="anime-title">
+                        {bestAnimeResults[0]?.title_english}
+                    </h1>
+                    <p className="anime-jpn-title">
+                        {bestAnimeResults[0]?.title_japanese}
+                    </p>
                     <p className="anime-synposis">
-                        Bro ipsum dolor sit amet skinny 360 fatty corduroy
-                        reverse camber white room. Bomb hole death cookies
-                        frontside T-bar gaper, back country heli core shot
-                        stoked grip tape dope sucker hole frozen chicken heads.
-                        Chillax bump Bike moguls. Road rash shred dust on crust,
-                        bomb chain ring couloir caballerial giblets carbon bomb
-                        hole Whistler hardtail 360 hot dogging twin tip. Bro
-                        clean bail park wheelie, grunt frontside glades free
-                        ride dirtbag 360.
+                        {bestAnimeResults[0]?.synopsis}
                     </p>
                 </div>
                 <hr />
                 <div className="anime-ratings">
                     <small className="label">SCORE</small>
-                    <p>score/10</p>
+                    {convertRating(bestAnimeResults[0]?.score)}
+                    <span>/10</span>
                     <small className="label">RANK</small>
-                    <p># rank</p>
+                    <span>#</span>
+                    {bestAnimeResults[0]?.rank}
                     <small className="label">YEAR</small>
-                    <p>2023</p>
+                    <p>{bestAnimeResults[0]?.year}</p>
                     <small className="label">EPS</small>
-                    <p>number of Eps</p>
+                    <p>{bestAnimeResults[0]?.episodes}</p>
                 </div>
                 <hr />
                 <div className="pills-container">
-                    //map over each studio and put it in the span
-                    <span className="hero-pill">studio</span>
+                    {bestAnimeResults[0]?.studios.map((s) => (
+                        <span
+                            key={bestAnimeResults[0]?.mal_id}
+                            className="hero-pill"
+                        >
+                            {s.name}
+                        </span>
+                    ))}
                 </div>
                 <div className="hero-buttons-container">
                     <button>Open Dossier</button>
