@@ -1,30 +1,24 @@
 import Logo from './Logo';
 import SearchBar from './SearchBar';
 import '../styles/navbar.css';
-export default function Navigation({
-    handleQueryChange,
-    query,
-    onDiscoverChange,
-    discover,
-}) {
+export default function Navigation({ onQueryChange, query, onViewChange, view }) {
     return (
         <nav className="navbar">
             <Logo></Logo>
             <SearchBar
-                onQueryChange={handleQueryChange}
+                onQueryChange={onQueryChange}
                 query={query}
             ></SearchBar>
             <div className="button-container">
-                {' '}
                 <button
-                    className={`discover-button ${discover === 'discover' ? 'active' : ''}`}
-                    onClick={() => onDiscoverChange('discover')}
+                    className={`discover-button ${view === 'discover' ? 'active' : ''}`}
+                    onClick={() => onViewChange('discover')}
                 >
                     Discover
                 </button>
                 <button
-                    className={`discover-button ${discover === 'browse' ? 'active' : ''}`}
-                    onClick={() => onDiscoverChange('browse')}
+                    className={`discover-button ${view === 'browse' ? 'active' : ''}`}
+                    onClick={() => onViewChange('browse')}
                 >
                     Browse
                 </button>

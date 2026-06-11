@@ -1,82 +1,56 @@
-import { useEffect, useState } from 'react';
 import '../styles/hero.css';
+import { useFetch } from '../hooks/useFetch';
+import { topAnimeUrl } from '../api/jikan';
+import { convertRating } from '../utils/format';
+import Loading from './Loading';
+import ErrorMessage from './ErrorMessage';
+
 export default function Hero() {
-    const [bestAnimeResults, setBestAnimeResults] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const { data, loading, error } = useFetch(topAnimeUrl(1));
+    const bestAnime = data?.data?.[0];
 
-    useEffect(function () {
-        const controller = new AbortController();
-        async function fetchBestAnime() {
-            setError(null);
-            try {
-                setLoading(true);
-                const res = await fetch(
-                    `https://api.jikan.moe/v4/top/anime?limit=1`,
-                    { signal: controller.signal },
-                );
-                if (!res.ok) {
-                    throw new Error(`Jikan request failed: ${res.status}`);
-                }
-                const data = await res.json();
-                setBestAnimeResults(data.data);
-            } catch (err) {
-                setError(err);
-            } finally {
-                if (!controller.signal.aborted) setLoading(false);
-            }
-        }
-        fetchBestAnime();
-        return function () {
-            controller.abort();
-        };
-    }, []);
+    if (loading) return <Loading />;
+    if (error) return <ErrorMessage message={error.message} />;
+    if (!bestAnime) return null;
 
-    function convertRating(rating) {
-        const roundedRating = Math.ceil(rating * 10) / 10;
-        return roundedRating.toFixed(1);
-    }
     return (
         <div className="hero-container">
             <div className="hero-poster">
                 <img
-                    src={bestAnimeResults[0]?.images?.jpg?.image_url}
-                    alt={`${bestAnimeResults[0]?.title}'s poster`}
+                    src={bestAnime?.images?.jpg?.image_url}
+                    alt={`${bestAnime?.title}'s poster`}
                     className="hero-poster-img"
                 />
             </div>
             <div className="hero-info-container">
                 <div className="anime-info">
                     <h1 className="anime-title">
-                        {bestAnimeResults[0]?.title_english}
+                        {bestAnime?.title_english}
                     </h1>
                     <p className="anime-jpn-title">
-                        {bestAnimeResults[0]?.title_japanese}
+                        {bestAnime?.title_japanese}
                     </p>
                     <p className="anime-synposis">
-                        {bestAnimeResults[0]?.synopsis}
+                        {bestAnime?.synopsis}
                     </p>
                 </div>
                 <hr />
                 <div className="anime-ratings">
                     <small className="label">SCORE</small>
-                    {convertRating(bestAnimeResults[0]?.score)}
+                    {convertRating(bestAnime?.score)}
                     <span>/10</span>
                     <small className="label">RANK</small>
                     <span>#</span>
-                    {bestAnimeResults[0]?.rank}
+                    {bestAnime?.rank}
                     <small className="label">YEAR</small>
-                    <p>{bestAnimeResults[0]?.year}</p>
+                    <p>{bestAnime?.year}</p>
                     <small className="label">EPS</small>
-                    <p>{bestAnimeResults[0]?.episodes}</p>
+                    <p>{bestAnime?.episodes}</p>
                 </div>
                 <hr />
                 <div className="pills-container">
-                    {bestAnimeResults[0]?.studios.map((s) => (
-                        <span
-                            key={bestAnimeResults[0]?.mal_id}
-                            className="hero-pill"
-                        >
+                    {bestAnime.studios.map((s) => (
+                        <span key={s.mal_id ?? s.name} className="hero-pill">
                             {s.name}
                         </span>
                     ))}

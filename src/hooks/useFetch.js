@@ -1,0 +1,52 @@
+import { useState, useEffect } from 'react';
+
+export function useFetch(url, { debounce = 0 } = {}) {
+    // Result is stored together with the url it was fetched for, so
+    // loading/data/error can be derived: a result for a different url
+    // (or no result yet) means we are still loading the current one.
+    const [result, setResult] = useState({
+        url: null,
+        data: null,
+        error: null,
+    });
+
+    useEffect(() => {
+        if (!url) return;
+        const controller = new AbortController();
+
+        async function fetchData() {
+            try {
+                const res = await fetch(url, { signal: controller.signal });
+                if (!res.ok) {
+                    if (res.status === 429)
+                        throw new Error(
+                            'Server is busy (rate limit). Please wait a moment.',
+                        );
+                    throw new Error(`Jikan request failed: ${res.status}`);
+                }
+                const data = await res.json();
+                setResult({ url, data, error: null });
+            } catch (err) {
+                if (err.name !== 'AbortError')
+                    setResult({ url, data: null, error: err });
+            }
+        }
+
+        if (debounce > 0) {
+            const id = setTimeout(fetchData, debounce);
+            return () => {
+                clearTimeout(id);
+                controller.abort();
+            };
+        }
+        fetchData();
+        return () => controller.abort();
+    }, [url, debounce]);
+
+    const isCurrent = result.url === url;
+    return {
+        data: url && isCurrent ? result.data : null,
+        error: url && isCurrent ? result.error : null,
+        loading: Boolean(url) && !isCurrent,
+    };
+}

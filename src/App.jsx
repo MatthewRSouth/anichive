@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Navigation from './components/Navigation';
-// import Browse from './components/Browse';
-// import Button from './components/Button';
 import './App.css';
 import AnimeList from './components/AnimeList';
 import ErrorMessage from './components/ErrorMessage';
@@ -10,71 +8,41 @@ import Empty from './components/Empty';
 import Pagination from './components/Pagination';
 import AnimeModal from './components/AnimeModal';
 import Hero from './components/Hero';
+import NowAiring from './components/NowAiring';
+import { useFetch } from './hooks/useFetch';
+import { searchAnimeUrl } from './api/jikan';
 
 function App() {
     const [query, setQuery] = useState('');
-    const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
-    const [hasSearched, setHasSearched] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(0);
-    const [openModal, setOpenModal] = useState(false);
-    const [selectedAnimeId, setSelectedAnimeId] = useState(0);
-    const [discover, setDiscover] = useState('discover');
+    const [selectedAnimeId, setSelectedAnimeId] = useState(null);
+    const [view, setView] = useState('discover');
 
     const PAGE_SIZE = 24;
 
-    useEffect(
-        function () {
-            const controller = new AbortController();
-            async function fetchAnime() {
-                setError(null);
-                if (query.length < 3) {
-                    setResults([]);
-                    setHasSearched(false);
-                    setTotalPages(0);
-                    return;
-                }
+    const searchUrl =
+        query.length >= 3
+            ? searchAnimeUrl(query, currentPage, PAGE_SIZE)
+            : null;
+    const {
+        data: searchData,
+        loading,
+        error,
+    } = useFetch(searchUrl, { debounce: 500 });
 
-                try {
-                    setLoading(true);
-                    const res = await fetch(
-                        `https://api.jikan.moe/v4/anime?q=${query}&page=${currentPage}&limit=${PAGE_SIZE}`,
-                        { signal: controller.signal },
-                    );
-                    if (!res.ok)
-                        throw new Error(`Jikan request failed: ${res.status}`);
-                    const data = await res.json();
+    const results = searchData?.data ?? [];
+    const totalPages = searchData?.pagination?.last_visible_page ?? 0;
+    const hasSearched = searchData !== null;
 
-                    setHasSearched(true);
-                    setResults(data.data);
-                    setTotalPages(data.pagination.last_visible_page);
-                } catch (err) {
-                    if (err.name === 'AbortError') return;
-                    setError(err);
-                } finally {
-                    setLoading(false);
-                }
-            }
-            const timerID = setTimeout(fetchAnime, 500);
-            return function () {
-                clearTimeout(timerID);
-                controller.abort();
-            };
-        },
-        [query, currentPage],
-    );
-
-    function handleDiscoverChange(view) {
-        setDiscover(view);
+    function handleViewChange(newView) {
+        setView(newView);
         setQuery('');
     }
 
     function handleQueryChange(newQuery) {
         setQuery(newQuery);
         setCurrentPage(1);
-        setDiscover('browse');
+        setView('browse');
     }
 
     function handlePageChange(newPage) {
@@ -82,26 +50,24 @@ function App() {
     }
 
     function handleOpenModal(animeId) {
-        setOpenModal(true);
         setSelectedAnimeId(animeId);
     }
     function handleCloseModal() {
-        console.log('handleCloseModal called', new Error().stack);
-        setOpenModal(false);
+        setSelectedAnimeId(null);
     }
 
     return (
         <>
             <header>
                 <Navigation
-                    handleQueryChange={handleQueryChange}
+                    onQueryChange={handleQueryChange}
                     query={query}
-                    discover={discover}
-                    onDiscoverChange={handleDiscoverChange}
+                    view={view}
+                    onViewChange={handleViewChange}
                 ></Navigation>
             </header>
             <main>
-                {discover === 'discover' ? (
+                {view === 'discover' ? (
                     <DiscoverView></DiscoverView>
                 ) : (
                     <BrowseView
@@ -119,7 +85,7 @@ function App() {
             </main>
             <footer></footer>
 
-            {openModal && (
+            {selectedAnimeId !== null && (
                 <AnimeModal
                     onCloseModal={handleCloseModal}
                     selectedAnimeId={selectedAnimeId}
@@ -136,6 +102,7 @@ function DiscoverView() {
     return (
         <div>
             <Hero></Hero>
+            <NowAiring></NowAiring>
         </div>
     );
 }

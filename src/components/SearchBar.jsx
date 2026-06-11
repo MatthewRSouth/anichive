@@ -7,13 +7,7 @@ export default function SearchBar({ onQueryChange, query }) {
                 className="query"
                 type="search"
                 placeholder="Search 25,000+ titles"
-                onChange={(e) => {
-                    console.log(
-                        'SearchBar onChange fired with:',
-                        JSON.stringify(e.target.value),
-                    );
-                    onQueryChange(e.target.value);
-                }}
+                onChange={(e) => onQueryChange(e.target.value)}
             />
         </div>
     );
