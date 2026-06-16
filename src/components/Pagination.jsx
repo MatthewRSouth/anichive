@@ -18,10 +18,11 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
     const pageItems = getPageNumbers(currentPage, totalPages);
 
     return (
-        <div>
+        <div className="flex justify-center">
             <button
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
+                className="txt-xl mx-5"
             >
                 Prev
             </button>
@@ -32,7 +33,11 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
                     <button
                         key={item}
                         onClick={() => onPageChange(item)}
-                        className={item === currentPage ? 'active' : ''}
+                        className={
+                            item === currentPage
+                                ? 'active text-2xl mx-5'
+                                : 'text-2xl mx-5'
+                        }
                     >
                         {item}
                     </button>

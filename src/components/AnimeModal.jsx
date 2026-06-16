@@ -241,6 +241,7 @@ function Recommendations({ selectedAnimeId, onOpenModal }) {
     const { data } = useFetch(animeRecommendationsUrl(selectedAnimeId), {
         debounce: 500,
     });
+    console.log(data);
     const recResults = data?.data?.slice(0, 6).map((item) => item.entry) ?? [];
 
     return (

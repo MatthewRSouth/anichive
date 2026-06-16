@@ -15,3 +15,7 @@ export function animeRecommendationsUrl(id) {
 export function topAnimeUrl(limit) {
     return `${BASE_URL}/top/anime?limit=${limit}`;
 }
+
+export function currentSeasonUrl() {
+    return `${BASE_URL}/seasons/now`;
+}

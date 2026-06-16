@@ -98,11 +98,11 @@ function App() {
 
 export default App;
 
-function DiscoverView() {
+function DiscoverView({ handleOpenModal }) {
     return (
         <div>
             <Hero></Hero>
-            <NowAiring></NowAiring>
+            <NowAiring onOpenModal={handleOpenModal}></NowAiring>
         </div>
     );
 }
