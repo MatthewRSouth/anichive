@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Navigation from './components/Navigation';
-import './App.css';
+
 import AnimeList from './components/AnimeList';
 import ErrorMessage from './components/ErrorMessage';
 import Loading from './components/Loading';
@@ -9,8 +9,12 @@ import Pagination from './components/Pagination';
 import AnimeModal from './components/AnimeModal';
 import Hero from './components/Hero';
 import NowAiring from './components/NowAiring';
+import TopAnime from './components/TopAnime';
+
 import { useFetch } from './hooks/useFetch';
 import { searchAnimeUrl } from './api/jikan';
+
+import './App.css';
 
 function App() {
     const [query, setQuery] = useState('');
@@ -103,6 +107,7 @@ function DiscoverView({ handleOpenModal }) {
         <div>
             <Hero></Hero>
             <NowAiring onOpenModal={handleOpenModal}></NowAiring>
+            <TopAnime onOpenModal={handleOpenModal}></TopAnime>
         </div>
     );
 }

@@ -19,3 +19,7 @@ export function topAnimeUrl(limit) {
 export function currentSeasonUrl() {
     return `${BASE_URL}/seasons/now`;
 }
+
+export function airingTopAnimeUrl(limit) {
+    return `${BASE_URL}/top/anime?filter=airing&limit=${limit}`;
+}
