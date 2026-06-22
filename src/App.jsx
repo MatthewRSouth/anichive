@@ -72,7 +72,9 @@ function App() {
             </header>
             <main>
                 {view === 'discover' ? (
-                    <DiscoverView></DiscoverView>
+                    <DiscoverView
+                        handleOpenModal={handleOpenModal}
+                    ></DiscoverView>
                 ) : (
                     <BrowseView
                         loading={loading}

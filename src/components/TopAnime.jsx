@@ -37,7 +37,7 @@ function TopAiringAnime({ onOpenModal }) {
         data: airingData,
         loading: airingLoading,
         error: airingError,
-    } = useFetch(inView ? airingTopAnimeUrl(12) : null, { debounce: 1500 });
+    } = useFetch(inView ? airingTopAnimeUrl(12) : null, { debounce: 3000 });
     const airingResults = airingData?.data?.slice(0, 13) ?? [];
     return (
         <div ref={ref}>

@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 
+/*At the top of useFetch.js, outside the hook function, declare a Map. This is your cache. It survives every mount/unmount because it's not in React state.
+Inside the hook's effect, before the fetch call: check if the cache has an entry for this URL. If yes — set the result directly from the cache, skip the fetch entirely. If no — proceed with the fetch.
+After a successful fetch, write the data to the cache before setting state. */
+
 export function useFetch(url, { debounce = 0 } = {}) {
     // Result is stored together with the url it was fetched for, so
     // loading/data/error can be derived: a result for a different url
