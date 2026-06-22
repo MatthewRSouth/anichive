@@ -7,7 +7,7 @@ import AnimeCard from './AnimeCard.jsx';
 export default function TopAnime({ onOpenModal }) {
     const [ref, inView] = useInView({ rootMargin: '200px' });
     const { data, loading, error } = useFetch(inView ? topAnimeUrl(12) : null, {
-        debounce: 500,
+        debounce: 1600,
     });
     const results = data?.data.slice(0, 13) ?? [];
 
@@ -37,7 +37,7 @@ function TopAiringAnime({ onOpenModal }) {
         data: airingData,
         loading: airingLoading,
         error: airingError,
-    } = useFetch(inView ? airingTopAnimeUrl(12) : null, { debounce: 3000 });
+    } = useFetch(inView ? airingTopAnimeUrl(12) : null, { debounce: 2400 });
     const airingResults = airingData?.data?.slice(0, 13) ?? [];
     return (
         <div ref={ref}>

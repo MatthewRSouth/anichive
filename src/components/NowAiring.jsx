@@ -4,9 +4,12 @@ import { currentSeasonUrl } from '../api/jikan';
 import AnimeCard from './AnimeCard';
 export default function NowAiring({ onOpenModal }) {
     const [ref, inView] = useInView({ rootMargin: '200px' });
-    const { data, loading, error } = useFetch(inView ? currentSeasonUrl() : null, {
-        debounce: 500,
-    });
+    const { data, loading, error } = useFetch(
+        inView ? currentSeasonUrl() : null,
+        {
+            debounce: 800,
+        },
+    );
     const airingResults = data?.data.slice(0, 18) ?? [];
 
     return (

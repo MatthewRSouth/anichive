@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 Inside the hook's effect, before the fetch call: check if the cache has an entry for this URL. If yes — set the result directly from the cache, skip the fetch entirely. If no — proceed with the fetch.
 After a successful fetch, write the data to the cache before setting state. */
 
+const cache = new Map();
+
 export function useFetch(url, { debounce = 0 } = {}) {
     // Result is stored together with the url it was fetched for, so
     // loading/data/error can be derived: a result for a different url
@@ -29,21 +31,31 @@ export function useFetch(url, { debounce = 0 } = {}) {
                     throw new Error(`Jikan request failed: ${res.status}`);
                 }
                 const data = await res.json();
-                setResult({ url, data, error: null });
+                const next = { url, data, error: null };
+                setResult(next);
+                cache.set(url, next);
             } catch (err) {
                 if (err.name !== 'AbortError')
                     setResult({ url, data: null, error: err });
             }
         }
+        if (cache.has(url)) {
+            setResult(cache.get(url));
+            return;
+        }
 
         if (debounce > 0) {
-            const id = setTimeout(fetchData, debounce);
+            const id = setTimeout(() => {
+                fetchData();
+            }, debounce);
+
             return () => {
                 clearTimeout(id);
                 controller.abort();
             };
         }
         fetchData();
+
         return () => controller.abort();
     }, [url, debounce]);
 
