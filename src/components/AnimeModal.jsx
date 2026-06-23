@@ -3,8 +3,10 @@ import { useEffect, useState, useRef } from 'react';
 import Rating from './Rating';
 import Rank from './Rank';
 import AnimeCard from './AnimeCard';
+
 import '../styles/animeList.css';
 import '../styles/AnimeModal.css';
+
 import { useFetch } from '../hooks/useFetch';
 import { animeFullUrl, animeRecommendationsUrl } from '../api/jikan';
 import { convertRating } from '../utils/format';
