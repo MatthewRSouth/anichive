@@ -50,7 +50,3 @@ npm run dev
 ## What I learned
 
 The biggest lesson from this project was about reusability and planning. I used Claude as a design tool to mock up the UI, which let me see it visually but masked a real shortfall: I didn't plan for component reusability before designing. The first build had duplicated fetch logic across multiple sections. The refactor — extracting `useFetch` as a custom hook and consolidating list-rendering logic — taught me to plan for reuse upfront rather than refactor after the fact. Going forward I'll do noun/verb decomposition before writing components, not after.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
